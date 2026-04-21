@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiskVision — AI-Powered Disk Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05080f;--bg2:#090d18;--card:#0d1424;--card2:#111827;
+  --border:#1e3a5f;--accent:#0ea5e9;--acc2:#38bdf8;
+  --purple:#8b5cf6;--green:#10b981;--yellow:#f59e0b;
+  --red:#ef4444;--orange:#f97316;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#475569;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(5,8,15,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(30,58,95,.4);transition:all .3s}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{width:32px;height:32px;border-radius:8px;object-fit:contain}
+.nav-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:1.8rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.88rem;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a:hover::after{width:100%}
+.nav-right{display:flex;gap:.75rem;align-items:center}
+.btn-nav{padding:.45rem 1.1rem;border-radius:7px;font-size:.85rem;font-weight:500;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.btn-fill{background:var(--accent);color:#fff}
+.btn-fill:hover{background:var(--acc2);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 4rem;position:relative;overflow:hidden}
+
+/* Animated grid */
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.05) 1px,transparent 1px);background-size:55px 55px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);animation:gridMove 20s linear infinite}
+@keyframes gridMove{0%{background-position:0 0}100%{background-position:55px 55px}}
+
+/* Particles */
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;animation:float linear infinite;opacity:0}
+@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:.6}90%{opacity:.3}100%{transform:translateY(-100px) translateX(40px);opacity:0}}
+
+.glow-top{position:absolute;top:15%;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(14,165,233,.12),transparent 70%);pointer-events:none;animation:glowPulse 4s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.8;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
+
+.glow-left{position:absolute;left:-100px;top:40%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(139,92,246,.06),transparent 70%);pointer-events:none}
+.glow-right{position:absolute;right:-100px;top:30%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(16,185,129,.05),transparent 70%);pointer-events:none}
+
+/* Hero content */
+.hero-content{position:relative;z-index:2;animation:heroFadeIn .8s ease-out}
+@keyframes heroFadeIn{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
+
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.3);color:var(--acc2);padding:.3rem .9rem;border-radius:99px;font-size:.78rem;margin-bottom:1.75rem;font-weight:500;animation:badgePop .6s ease-out .2s both}
+@keyframes badgePop{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}
+.dot-pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:800;line-height:1.06;margin-bottom:1.4rem;letter-spacing:-1.5px}
+h1 em{font-style:normal;color:var(--accent);position:relative}
+h1 em::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px}
+
+.hero-sub{font-size:1.1rem;color:var(--text2);max-width:540px;line-height:1.75;margin-bottom:2.4rem;font-weight:300}
+
+.hero-btns{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
+.btn-hero{padding:.75rem 1.8rem;border-radius:10px;font-size:.95rem;font-weight:500;text-decoration:none;transition:all .25s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:.4rem}
+.btn-hero.primary{background:var(--accent);color:#fff;box-shadow:0 0 30px rgba(14,165,233,.3)}
+.btn-hero.primary:hover{background:var(--acc2);transform:translateY(-2px);box-shadow:0 0 40px rgba(14,165,233,.4)}
+.btn-hero.research{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3)}
+.btn-hero.research:hover{background:rgba(139,92,246,.25);transform:translateY(-2px)}
+
+/* MOCKUP */
+.mockup-wrap{width:100%;max-width:880px;margin:2.5rem auto 0;position:relative;animation:mockupFloat 6s ease-in-out infinite}
+@keyframes mockupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.mockup-wrap::before{content:'';position:absolute;bottom:-40px;left:10%;right:10%;height:40px;background:radial-gradient(ellipse,rgba(14,165,233,.2),transparent 70%);filter:blur(15px)}
+.window{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(14,165,233,.05)}
+.wbar{background:#06080f;padding:.6rem 1rem;display:flex;align-items:center;gap:.45rem;border-bottom:1px solid var(--border)}
+.wd{width:11px;height:11px;border-radius:50%}
+.wcontent{display:flex;height:360px}
+.wsb{width:172px;background:#04060e;border-right:1px solid var(--border);padding:.65rem 0;flex-shrink:0}
+.wsbi{display:flex;align-items:center;gap:9px;padding:.55rem .9rem;font-size:.78rem;color:var(--text3);cursor:pointer;transition:all .2s}
+.wsbi:hover{color:var(--text2);background:rgba(255,255,255,.03)}
+.wsbi.on{background:#0f1e35;color:var(--acc2);border-left:3px solid var(--accent);padding-left:.7rem}
+.wm{flex:1;padding:1.1rem;background:var(--bg2)}
+.wstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.85rem}
+.wsc{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:.65rem;text-align:center;transition:all .3s}
+.wsc:hover{border-color:var(--accent);transform:translateY(-2px)}
+.wsv{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700}
+.wsl{font-size:.65rem;color:var(--text3);margin-top:2px}
+.wcards{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.wcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.7rem;cursor:pointer;transition:all .2s}
+.wcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.wcicon{font-size:1.1rem;margin-bottom:.3rem}
+.wctitle{font-size:.7rem;font-weight:500;color:var(--text);margin-bottom:.15rem}
+.wcdesc{font-size:.63rem;color:var(--text3)}
+
+/* STATS */
+.statsbar{padding:3.5rem 2rem;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;border-top:1px solid rgba(30,58,95,.35);border-bottom:1px solid rgba(30,58,95,.35);background:linear-gradient(180deg,rgba(14,165,233,.02),transparent)}
+.sb-item{text-align:center;transition:transform .3s}
+.sb-item:hover{transform:translateY(-3px)}
+.sb-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--accent);background:linear-gradient(135deg,var(--accent),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb-desc{font-size:.82rem;color:var(--text3);margin-top:.2rem}
+
+/* SECTION */
+.section{padding:5rem 2rem;max-width:1080px;margin:0 auto}
+.sec-tag{font-size:.75rem;color:var(--accent);font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem}
+.sec-h{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;letter-spacing:-.5px;margin-bottom:.8rem}
+.sec-sub{color:var(--text2);font-size:.95rem;max-width:480px;line-height:1.7;margin-bottom:2.8rem;font-weight:300}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;transition:all .3s;position:relative;overflow:hidden;cursor:default}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--fc,var(--accent));opacity:0;transition:opacity .3s}
+.feat::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(14,165,233,.04),transparent 60%);opacity:0;transition:opacity .3s}
+.feat:hover{border-color:var(--fc,var(--accent));transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.feat:hover::before{opacity:1}
+.feat:hover::after{opacity:1}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.9rem;transition:transform .3s}
+.feat:hover .feat-icon{transform:scale(1.1) rotate(-5deg)}
+.feat-h{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+.feat-p{font-size:.84rem;color:var(--text2);line-height:1.6}
+
+/* GAMING */
+.gaming-box{background:linear-gradient(135deg,var(--card2),var(--bg2));border:1px solid var(--border);border-radius:18px;padding:2.8rem;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;position:relative;overflow:hidden}
+.gaming-box::after{content:'GAMING';position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Syne',sans-serif;font-size:5.5rem;font-weight:800;color:rgba(139,92,246,.04);letter-spacing:-.4rem;pointer-events:none;white-space:nowrap}
+.gbadge{display:inline-flex;align-items:center;gap:5px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:#a78bfa;padding:.28rem .8rem;border-radius:99px;font-size:.73rem;font-weight:500;margin-bottom:.9rem}
+.gaming-h{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1.1;margin-bottom:.9rem}
+.gaming-h span{color:var(--purple)}
+.gaming-p{font-size:.87rem;color:var(--text2);line-height:1.7;margin-bottom:1.4rem}
+.glist{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.glist li{display:flex;align-items:center;gap:.55rem;font-size:.83rem;color:var(--text2)}
+.glist li::before{content:'✓';color:var(--green);font-weight:700;font-size:.85rem;flex-shrink:0}
+.gvisual{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.3rem}
+.gv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem}
+.gv-title{font-size:.82rem;font-weight:600}
+.gtoggle{background:var(--purple);color:#fff;border:none;border-radius:5px;padding:.28rem .75rem;font-size:.72rem;cursor:pointer;font-weight:500;box-shadow:0 0 15px rgba(139,92,246,.4)}
+.gproc{display:flex;flex-direction:column;gap:.45rem}
+.gp{display:flex;align-items:center;justify-content:space-between;padding:.45rem .7rem;background:var(--card);border-radius:6px;border:1px solid var(--border);transition:all .3s}
+.gp:hover{border-color:var(--border);background:var(--card2)}
+.gp-name{font-size:.73rem;color:var(--text2)}
+.gp-val{font-size:.73rem;font-weight:500}
+.killed{color:var(--red);text-decoration:line-through;opacity:.5}
+.saved{color:var(--green)}
+.gv-total{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:.73rem}
+
+/* AI */
+.ai-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2.8rem;position:relative;overflow:hidden}
+.ai-box::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(14,165,233,.06),transparent 70%)}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;margin-top:1.8rem}
+.model-list{display:flex;flex-direction:column;gap:.7rem}
+.model{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:.9rem 1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.9rem}
+.model.on{border-color:var(--accent);background:rgba(14,165,233,.06);box-shadow:0 0 20px rgba(14,165,233,.1)}
+.mdot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:.2s}
+.model.on .mdot{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.model-name{font-size:.87rem;font-weight:500}
+.mbadge{font-size:.68rem;padding:.18rem .55rem;border-radius:99px}
+.mb-local{background:rgba(14,165,233,.1);color:var(--acc2);border:1px solid rgba(14,165,233,.2)}
+.mb-cloud{background:rgba(139,92,246,.1);color:#a78bfa;border:1px solid rgba(139,92,246,.2)}
+.mb-free{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+.ai-chat{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1.2rem;display:flex;flex-direction:column;gap:.7rem}
+.msg{padding:.7rem .9rem;border-radius:9px;font-size:.8rem;line-height:1.6;max-width:88%}
+.msg.user{background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);align-self:flex-end;color:var(--acc2)}
+.msg.ai{background:var(--card);border:1px solid var(--border);color:var(--text2)}
+.mlbl{font-size:.66rem;font-weight:600;margin-bottom:.25rem}
+.msg.ai .mlbl{color:var(--accent)}
+.msg.user .mlbl{color:var(--acc2)}
+
+/* RESEARCH CARD */
+.research-card{background:linear-gradient(135deg,rgba(13,20,36,.98),rgba(7,12,24,.98));border:1px solid var(--border);border-radius:18px;padding:2.8rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;position:relative;overflow:hidden;transition:all .3s}
+.research-card:hover{border-color:rgba(14,165,233,.4);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.research-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent),var(--purple))}
+.research-card::after{content:'';position:absolute;top:-60px;right:-60px;width:250px;height:250px;background:radial-gradient(circle,rgba(14,165,233,.05),transparent 70%)}
+.rc-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);color:var(--acc2);padding:.25rem .8rem;border-radius:99px;font-size:.72rem;font-weight:500;margin-bottom:.9rem}
+.rc-h{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.7rem;line-height:1.2}
+.rc-p{font-size:.87rem;color:var(--text2);line-height:1.7;max-width:540px;margin-bottom:1.4rem}
+.rc-meta{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.2rem}
+.rc-tag{background:var(--card2);border:1px solid var(--border);color:var(--text3);padding:.25rem .7rem;border-radius:6px;font-size:.72rem}
+
+/* Team grid */
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1.2rem}
+.team-chip{background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.15);border-radius:8px;padding:.5rem .75rem;text-align:center;transition:all .2s}
+.team-chip:hover{border-color:var(--accent);background:rgba(14,165,233,.12);transform:translateY(-2px)}
+.team-name{font-size:.75rem;font-weight:500;color:var(--text2)}
+.team-id{font-size:.65rem;color:var(--text3);margin-top:.15rem;font-family:monospace}
+
+.rc-btns{display:flex;flex-direction:column;gap:.7rem;flex-shrink:0;position:relative;z-index:1}
+.rc-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:9px;text-decoration:none;font-size:.85rem;font-weight:500;white-space:nowrap;transition:all .2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.rc-btn.view{background:var(--accent);color:#fff;box-shadow:0 0 20px rgba(14,165,233,.3)}
+.rc-btn.view:hover{background:var(--acc2);transform:translateY(-2px);box-shadow:0 0 30px rgba(14,165,233,.4)}
+.rc-btn.dl{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.rc-btn.dl:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+/* COMING SOON */
+.soon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.9rem}
+.soon-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;position:relative;opacity:.75;transition:all .3s}
+.soon-card:hover{opacity:1;border-color:rgba(245,158,11,.3);transform:translateY(-2px)}
+.soon-badge{position:absolute;top:.7rem;right:.7rem;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--yellow);font-size:.62rem;padding:.18rem .55rem;border-radius:99px;font-weight:500}
+.soon-icon{font-size:1.4rem;margin-bottom:.65rem}
+.soon-h{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.35rem}
+.soon-p{font-size:.78rem;color:var(--text3);line-height:1.5}
+
+/* FOUNDER */
+.founder-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2.5rem;text-align:center;max-width:640px;margin:0 auto;transition:all .3s}
+.founder-box:hover{border-color:rgba(14,165,233,.3);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.founder-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;margin:0 auto 1.3rem;box-shadow:0 0 30px rgba(14,165,233,.3);animation:avatarGlow 3s ease-in-out infinite}
+@keyframes avatarGlow{0%,100%{box-shadow:0 0 30px rgba(14,165,233,.3)}50%{box-shadow:0 0 50px rgba(14,165,233,.5)}}
+blockquote{font-size:1.05rem;line-height:1.8;color:var(--text2);font-style:italic;font-weight:300;margin-bottom:1.2rem;position:relative;padding:0 1rem}
+blockquote::before{content:'\201C';position:absolute;left:-10px;top:-18px;font-size:4rem;color:rgba(14,165,233,.2);font-family:'Syne',sans-serif;line-height:1}
+.founder-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700}
+.founder-role{font-size:.82rem;color:var(--accent);margin-top:.2rem}
+.founder-uni{font-size:.78rem;color:var(--text3);margin-top:.15rem}
+
+/* FOOTER CTA */
+.footer-cta{padding:6rem 2rem;text-align:center;position:relative;overflow:hidden}
+.fg{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(14,165,233,.1),transparent 70%);animation:glowPulse 4s ease-in-out infinite}
+.footer-cta h2{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3vw,2.8rem);font-weight:800;margin-bottom:.9rem}
+.footer-cta p{color:var(--text2);max-width:420px;margin:0 auto 2rem;line-height:1.7;font-weight:300}
+.domain{display:inline-block;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);color:var(--acc2);padding:.28rem .75rem;border-radius:6px;font-size:.78rem;font-family:monospace;margin-top:1.3rem}
+
+footer{border-top:1px solid rgba(30,58,95,.35);padding:1.3rem 2rem;text-align:center;color:var(--text3);font-size:.78rem}
+footer a{color:var(--accent);text-decoration:none}
+
+/* SCROLL ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  /* NAV */
+  nav{padding:.7rem 1rem}
+  .nav-links{display:none}
+  .nav-right .btn-nav{padding:.4rem .7rem;font-size:.78rem}
+
+  /* HERO */
+  .hero{padding:5rem 1rem 3rem}
+  h1{font-size:2rem;letter-spacing:-.5px}
+  .hero-sub{font-size:.92rem}
+  .hero-btns{flex-direction:column;align-items:center}
+  .btn-hero{width:100%;max-width:300px;text-align:center;justify-content:center}
+  .glow-top{width:280px;height:150px}
+  .glow-left,.glow-right{display:none}
+
+  /* MOCKUP */
+  .mockup-wrap{margin-top:1.5rem}
+  .window{border-radius:10px}
+  .wcontent{height:280px}
+  .wsb{width:130px}
+  .wsbi{font-size:.7rem;padding:.45rem .65rem;gap:6px}
+  .wm{padding:.8rem}
+  .wstats{gap:.4rem}
+  .wsv{font-size:1rem}
+  .wsl{font-size:.6rem}
+  .wcards{gap:.35rem}
+  .wcard{padding:.5rem}
+  .wcicon{font-size:.9rem}
+  .wctitle{font-size:.62rem}
+  .wcdesc{font-size:.55rem}
+
+  /* STATS BAR */
+  .statsbar{gap:2rem;padding:2.5rem 1rem}
+  .sb-num{font-size:1.6rem}
+
+  /* SECTIONS */
+  .section{padding:3rem 1rem}
+  .section::before{margin-bottom:2.5rem}
+  .sec-h{font-size:1.5rem}
+
+  /* FEATURES GRID */
+  .feat-grid{grid-template-columns:1fr}
+
+  /* HEALTH SCORE */
+  .section > div[style*="grid-template-columns:1fr 1fr"]{
+    display:flex!important;flex-direction:column!important;gap:1.2rem!important
+  }
+
+  /* AI SECTION */
+  .ai-grid{grid-template-columns:1fr}
+  .ai-box{padding:1.5rem}
+
+  /* RESEARCH CARD */
+  .research-card{grid-template-columns:1fr;padding:1.5rem}
+  .research-card::before{display:none}
+  .rc-btns{flex-direction:row;justify-content:flex-start}
+  .rc-btn{padding:.6rem 1rem;font-size:.8rem}
+  .rc-h{font-size:1.1rem}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* FOUNDER */
+  .founder-box{padding:1.5rem;margin:0 0}
+  blockquote{font-size:.92rem}
+
+  /* FOOTER CTA */
+  .footer-cta{padding:4rem 1rem}
+  .footer-cta h2{font-size:1.5rem}
+  .fg{width:280px}
+
+  /* PARTICLES - disable on mobile for performance */
+  .particles{display:none}
+  .cursor-glow{display:none}
+}
+
+@media(max-width:400px){
+  h1{font-size:1.7rem}
+  .wsb{width:110px}
+  .wsbi{font-size:.65rem;padding:.4rem .5rem}
+  .team-grid{grid-template-columns:1fr}
+  .rc-btns{flex-direction:column}
+}
+
+/* ── CURSOR GLOW ── */
+.cursor-glow{position:fixed;pointer-events:none;z-index:9999;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.06),transparent 70%);transform:translate(-50%,-50%);transition:opacity .3s}
+
+/* ── SECTION REVEAL ── */
+@keyframes slideUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+.reveal{animation:slideUp .7s ease-out both}
+
+/* ── GLOWING BORDER ON FEAT HOVER ── */
+.feat:hover{box-shadow:0 0 0 1px var(--fc,var(--accent)),0 20px 50px rgba(0,0,0,.4),0 0 30px rgba(14,165,233,.08)}
+
+/* ── TYPING CURSOR ── */
+.typing::after{content:'|';animation:blink .7s infinite;color:var(--accent);font-weight:300}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── STAT COUNTER GLOW ── */
+.sb-num{text-shadow:0 0 20px rgba(14,165,233,.4)}
+
+/* ── RESEARCH CARD SHINE ── */
+@keyframes shine{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(300%) rotate(45deg)}}
+.research-card::after{content:'';position:absolute;top:-50%;left:-50%;width:30%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);transform:rotate(45deg);animation:shine 4s ease-in-out infinite}
+
+/* ── FOUNDER CARD BORDER ANIMATION ── */
+@keyframes borderGlow{0%,100%{border-color:var(--border)}50%{border-color:rgba(14,165,233,.4)}}
+.founder-box{animation:borderGlow 3s ease-in-out infinite}
+
+/* ── NAV ACTIVE LINK ── */
+.nav-links a.active{color:var(--accent)}
+
+/* ── MOCKUP SCREEN SCAN LINE ── */
+@keyframes scanLine{0%{top:0}100%{top:100%}}
+.window::after{content:'';position:absolute;left:0;right:0;height:1px;background:rgba(14,165,233,.08);animation:scanLine 4s linear infinite;pointer-events:none}
+.window{position:relative}
+
+/* ── HERO TITLE GRADIENT ANIMATION ── */
+@keyframes gradientShift{0%,100%{color:var(--accent)}50%{color:var(--acc2)}}
+h1 em{animation:gradientShift 3s ease-in-out infinite}
+
+/* ── SMOOTH SECTION DIVIDERS ── */
+.section::before{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,rgba(30,58,95,.6),transparent);margin-bottom:4rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="data:image/png;base64,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" alt="DiskVision Logo">
+    <span class="nav-logo-text">DiskVision</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#treemap">Treemap</a></li>
+    <li><a href="#ai">AI Engine</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="research.html" class="btn-nav btn-outline">📄 Read Paper</a>
+  </div>
+</nav>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="glow-top"></div>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+
+  <div class="hero-content">
+    <div class="badge"><span class="dot-pulse"></span>In Active Development — Launching Soon</div>
+    <h1>Your disk, finally<br><em>under control</em></h1>
+    <p class="hero-sub">DiskVision is an AI-powered Windows desktop app that scans, analyzes, and cleans your storage — and actually tells you what to delete and what to keep.</p>
+    <div class="hero-btns">
+      <a href="research.html" class="btn-hero primary">📄 Read the Research Paper</a>
+      <a href="research.html" class="btn-hero research">⬇ Download Paper</a>
+    </div>
+  </div>
+
+  <div class="mockup-wrap">
+    <div class="window">
+      <div class="wbar">
+        <div class="wd" style="background:#ef4444"></div>
+        <div class="wd" style="background:#f59e0b"></div>
+        <div class="wd" style="background:#10b981"></div>
+        <span style="margin-left:.5rem;font-size:.72rem;color:#475569">DiskVision Pro</span>
+        <span style="margin-left:auto;font-size:.68rem;color:#10b981">● LLaMA 3.2 Connected</span>
+      </div>
+      <div class="wcontent">
+        <div class="wsb">
+          <div class="wsbi on">⊞ Dashboard</div>
+          <div class="wsbi">🔍 Analyzer</div>
+          <div class="wsbi">🔁 Duplicates</div>
+          <div class="wsbi">🧹 Cleaner</div>
+          <div class="wsbi">🤖 AI Analysis</div>
+                    <div class="wsbi">📊 RAM Monitor</div>
+        </div>
+        <div class="wm">
+          <div class="wstats">
+            <div class="wsc"><div class="wsv" style="color:var(--accent)">14.2 GB</div><div class="wsl">Reclaimable</div></div>
+            <div class="wsc"><div class="wsv" style="color:var(--purple)">847</div><div class="wsl">Duplicates</div></div>
+            <div class="wsc"><div class="wsv" style="color:var(--green)">6.4 GB</div><div class="wsl">Temp Files</div></div>
+          </div>
+          <div class="wcards">
+            <div class="wcard"><div class="wcicon">🔍</div><div class="wctitle">Full Scan</div><div class="wcdesc">All drives</div></div>
+            <div class="wcard"><div class="wcicon">🤖</div><div class="wctitle">AI Analyze</div><div class="wcdesc">Smart plan</div></div>
+            <div class="wcard"><div class="wcicon">🔁</div><div class="wctitle">Duplicates</div><div class="wcdesc">Find dupes</div></div>
+            <div class="wcard"><div class="wcicon">🔒</div><div class="wctitle">Encrypt</div><div class="wcdesc">AES-256</div></div>
+            <div class="wcard"><div class="wcicon">🗺</div><div class="wctitle">Treemap</div><div class="wcdesc">Visualize</div></div>
+            <div class="wcard"><div class="wcicon">🧹</div><div class="wctitle">Quick Clean</div><div class="wcdesc">1-click</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="statsbar">
+  <div class="sb-item fade-up"><div class="sb-num">12+</div><div class="sb-desc">Core Features</div></div>
+  <div class="sb-item fade-up"><div class="sb-num">4</div><div class="sb-desc">AI Analysis Modes</div></div>
+  <div class="sb-item fade-up"><div class="sb-num">100%</div><div class="sb-desc">Local & Private</div></div>
+  <div class="sb-item fade-up"><div class="sb-num">Free</div><div class="sb-desc">Open Source Core</div></div>
+</div>
+
+<!-- FEATURES -->
+<section class="section fade-up" id="features">
+  <div class="sec-tag">Features</div>
+  <h2 class="sec-h">Everything your disk needs,<br>in one place</h2>
+  <p class="sec-sub">No more installing 5 different tools. DiskVision does it all — and AI ties it together.</p>
+  <div class="feat-grid">
+    <div class="feat fade-up" style="--fc:var(--accent)"><div class="feat-icon" style="background:rgba(14,165,233,.1)">🔍</div><div class="feat-h">Deep Disk Scanner</div><div class="feat-p">Recursively scans every folder, finding large, redundant, and unnecessary files across all drives in seconds.</div></div>
+    <div class="feat fade-up" style="--fc:var(--purple)"><div class="feat-icon" style="background:rgba(139,92,246,.1)">🤖</div><div class="feat-h">AI Recommendation Engine</div><div class="feat-p">Powered by LLMs. Classifies every file as SAFE, CAUTION, or DANGEROUS with a clear reason. No guessing.</div></div>
+    <div class="feat fade-up" style="--fc:var(--green)"><div class="feat-icon" style="background:rgba(16,185,129,.1)">🔁</div><div class="feat-h">Duplicate Detector</div><div class="feat-p">MD5 hash-based 2-phase detection finds byte-for-byte duplicates across different folders — recover GBs instantly.</div></div>
+    <div class="feat fade-up" style="--fc:var(--yellow)"><div class="feat-icon" style="background:rgba(245,158,11,.1)">🗺</div><div class="feat-h">Space Treemap</div><div class="feat-p">Visual interactive treemap shows which folders eat your disk. Click to explore, take action right away.</div></div>
+    <div class="feat fade-up" style="--fc:var(--orange)"><div class="feat-icon" style="background:rgba(249,115,22,.1)">🧹</div><div class="feat-h">Temp File Cleaner</div><div class="feat-p">One click to wipe Windows Temp, browser caches, prefetch data, and update leftovers.</div></div>
+    <div class="feat fade-up" style="--fc:var(--red)"><div class="feat-icon" style="background:rgba(239,68,68,.1)">📊</div><div class="feat-h">RAM & CPU Monitor</div><div class="feat-p">Real-time system monitoring shows exactly which processes hog memory so you can kill them.</div></div>
+    <div class="feat fade-up" style="--fc:var(--acc2)"><div class="feat-icon" style="background:rgba(56,189,248,.1)">⚡</div><div class="feat-h">Fast File Search</div><div class="feat-p">SQLite-indexed search finds any file in milliseconds — no waiting, no Windows Search delays.</div></div>
+    <div class="feat fade-up" style="--fc:#a78bfa"><div class="feat-icon" style="background:rgba(167,139,250,.1)">🔒</div><div class="feat-h">File Encryption</div><div class="feat-p">AES-256-CTR + HMAC authentication. Password-protect any file with military-grade security.</div></div>
+    <div class="feat fade-up" style="--fc:var(--green)"><div class="feat-icon" style="background:rgba(16,185,129,.1)">📦</div><div class="feat-h">Smart Compression</div><div class="feat-p">ZIP, LZMA, or 7-Zip. Automatically skips already-compressed files to save time.</div></div>
+    <div class="feat fade-up" style="--fc:var(--yellow)"><div class="feat-icon" style="background:rgba(245,158,11,.1)">🚀</div><div class="feat-h">Startup Manager</div><div class="feat-p">See every program that auto-starts with Windows. Disable slow-boot culprits without deleting them.</div></div>
+    <div class="feat fade-up" style="--fc:var(--accent)"><div class="feat-icon" style="background:rgba(14,165,233,.1)">🌙</div><div class="feat-h">Arabic & English UI</div><div class="feat-p">Full bilingual support with live switching. Dark and light themes built for everyone.</div></div>
+    <div class="feat fade-up" style="--fc:var(--purple)"><div class="feat-icon" style="background:rgba(139,92,246,.1)">💊</div><div class="feat-h">Health Score</div><div class="feat-p">A single 0–100 score that grades your disk and tells you exactly what to fix to improve it.</div></div>
+  </div>
+</section>
+
+<!-- TREEMAP -->
+<section class="section fade-up" id="treemap">
+  <div class="sec-tag">Disk Visualization</div>
+  <h2 class="sec-h">See exactly where<br>your space goes</h2>
+  <p class="sec-sub">The interactive Treemap shows every folder and file as a colored block — bigger block = more space. Click any block to explore deeper.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+
+    <!-- Treemap Visual -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:1.5rem;position:relative;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <span style="font-size:.8rem;font-weight:600;color:var(--text)">C:\ Drive — 512 GB</span>
+        <span style="font-size:.75rem;color:var(--red)">88% used</span>
+      </div>
+      <!-- Treemap grid simulation -->
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:120px 80px;gap:3px;border-radius:8px;overflow:hidden">
+        <div style="background:rgba(14,165,233,.35);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;grid-row:span 2" onmouseover="this.style.background='rgba(14,165,233,.55)'" onmouseout="this.style.background='rgba(14,165,233,.35)'">
+          <div style="font-size:1.4rem">🎬</div>
+          <div style="font-size:.75rem;font-weight:600;color:#fff;margin-top:.3rem">Videos</div>
+          <div style="font-size:.68rem;color:rgba(255,255,255,.7)">180 GB</div>
+        </div>
+        <div style="background:rgba(139,92,246,.35);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,92,246,.55)'" onmouseout="this.style.background='rgba(139,92,246,.35)'">
+          <div style="font-size:1rem">🎮</div>
+          <div style="font-size:.68rem;font-weight:600;color:#fff">Games</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.7)">95 GB</div>
+        </div>
+        <div style="background:rgba(16,185,129,.3);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(16,185,129,.5)'" onmouseout="this.style.background='rgba(16,185,129,.3)'">
+          <div style="font-size:1rem">🖼</div>
+          <div style="font-size:.68rem;font-weight:600;color:#fff">Photos</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.7)">42 GB</div>
+        </div>
+        <div style="background:rgba(249,115,22,.3);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(249,115,22,.5)'" onmouseout="this.style.background='rgba(249,115,22,.3)'">
+          <div style="font-size:.9rem">📦</div>
+          <div style="font-size:.65rem;font-weight:600;color:#fff">Programs</div>
+          <div style="font-size:.6rem;color:rgba(255,255,255,.7)">38 GB</div>
+        </div>
+        <div style="background:rgba(239,68,68,.25);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(239,68,68,.45)'" onmouseout="this.style.background='rgba(239,68,68,.25)'">
+          <div style="font-size:.9rem">🗑</div>
+          <div style="font-size:.65rem;font-weight:600;color:#fff">Temp</div>
+          <div style="font-size:.6rem;color:rgba(255,255,255,.7)">6.4 GB</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem;font-size:.72rem;color:var(--text3);text-align:center">Hover over any block to see details · Click to drill down</div>
+    </div>
+
+    <!-- Right side -->
+    <div style="display:flex;flex-direction:column;gap:1.2rem">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;border-left:3px solid var(--accent);transition:transform .2s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+        <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem">🗺 Visual disk map</div>
+        <div style="font-size:.84rem;color:var(--text2);line-height:1.6">Every file and folder shown as a colored rectangle. Bigger rectangle = more space. Instantly spot what's eating your disk.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;border-left:3px solid var(--purple);transition:transform .2s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+        <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem">🔍 Click to drill down</div>
+        <div style="font-size:.84rem;color:var(--text2);line-height:1.6">Click any block to go deeper into that folder and see exactly which files are taking the most space inside it.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;border-left:3px solid var(--green);transition:transform .2s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+        <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem">⚡ Delete directly</div>
+        <div style="font-size:.84rem;color:var(--text2);line-height:1.6">Right-click any block to delete, compress, or encrypt that file — without leaving the treemap view.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;border-left:3px solid var(--yellow);transition:transform .2s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+        <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.4rem">🔄 Real-time update</div>
+        <div style="font-size:.84rem;color:var(--text2);line-height:1.6">The map updates automatically after every cleanup so you always see the current state of your disk.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AI -->
+<section class="section fade-up" id="ai">
+  <div class="ai-box">
+    <div class="sec-tag">AI Engine</div>
+    <h2 class="sec-h" style="margin-bottom:.4rem">Use the model you love</h2>
+    <p style="color:var(--text2);font-size:.9rem;line-height:1.7;font-weight:300">Local, OpenAI, or Gemini — your choice. All analysis stays on your machine.</p>
+    <div class="ai-grid">
+      <div class="model-list">
+        <div class="model on"><div class="mdot"></div><div><div class="model-name">LLaMA 3.2 (Ollama)</div><div style="display:flex;gap:.4rem;margin-top:.3rem"><span class="mbadge mb-local">Local</span><span class="mbadge mb-free">Free</span></div></div></div>
+        <div class="model"><div class="mdot"></div><div><div class="model-name">GPT-4o mini</div><div style="display:flex;gap:.4rem;margin-top:.3rem"><span class="mbadge mb-cloud">OpenAI</span></div></div></div>
+        <div class="model"><div class="mdot"></div><div><div class="model-name">Gemini 1.5 Flash</div><div style="display:flex;gap:.4rem;margin-top:.3rem"><span class="mbadge mb-cloud">Google</span></div></div></div>
+        <div class="model"><div class="mdot"></div><div><div class="model-name">Any Ollama Model</div><div style="display:flex;gap:.4rem;margin-top:.3rem"><span class="mbadge mb-local">Custom</span></div></div></div>
+      </div>
+      <div class="ai-chat">
+        <div class="msg user"><div class="mlbl">You</div>Analyze my downloads folder — what can I safely delete?</div>
+        <div class="msg ai"><div class="mlbl">DiskVision AI</div>Scanned 1,247 files (8.3 GB). Found 340 MB old installers (SAFE), 2.1 GB duplicate videos (SAFE), 180 MB unknown .dat files (CAUTION). Safe reclaim: <strong style="color:var(--green)">2.44 GB</strong>.</div>
+        <div class="msg user"><div class="mlbl">You</div>What about the .dat files?</div>
+        <div class="msg ai"><div class="mlbl">DiskVision AI</div>3 files match game save patterns — keep them. The other 12 are leftover temp data from uninstalled apps — SAFE to delete. Want a full cleanup plan?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="section fade-up" id="research">
+  <div class="sec-tag">Academic Research</div>
+  <h2 class="sec-h">The paper behind the project</h2>
+  <p class="sec-sub" style="margin-bottom:2rem">DiskVision is a university graduation project at Sphinx University. Read or download the full academic paper.</p>
+  <div class="research-card">
+    <div>
+      <div class="rc-badge">📄 IEEE-Style Research Paper · Sphinx University 2025–2026</div>
+      <h3 class="rc-h">DiskVision: An AI-Powered System for<br>Intelligent Disk Analysis and Storage Optimization</h3>
+      <p class="rc-p">Covers related work (CCleaner, WinDirStat, TreeSize, Duplicate Cleaner, Everything), full system methodology, AI analysis modes, comparative feature table, and 12 IEEE references. Supervised by Dr. Amr Hassanain.</p>
+      <div class="rc-meta">
+        <span class="rc-tag">Sphinx University</span>
+        <span class="rc-tag">AI Department</span>
+        <span class="rc-tag">2025–2026</span>
+        <span class="rc-tag">Dr. Amr Hassanain</span>
+        <span class="rc-tag">12 References</span>
+      </div>
+      <div style="font-size:.75rem;color:var(--text3);margin-bottom:.6rem;font-weight:500">The Team</div>
+      <div class="team-grid">
+        <div class="team-chip"><div class="team-name">Mark Mamdouh Sadek</div><div class="team-id">4241255</div></div>
+        <div class="team-chip"><div class="team-name">Mohamed Shaaban</div><div class="team-id">4241101</div></div>
+        <div class="team-chip"><div class="team-name">Mohamed Saber</div><div class="team-id">4241256</div></div>
+        <div class="team-chip"><div class="team-name">Jenor Saber Atallah</div><div class="team-id">4241257</div></div>
+        <div class="team-chip"><div class="team-name">Moamen Mohamed</div><div class="team-id">4241270</div></div>
+        <div class="team-chip"><div class="team-name">Abdullah Mohamed</div><div class="team-id">4241274</div></div>
+        <div class="team-chip"><div class="team-name">Mohamed Maged</div><div class="team-id">4241622</div></div>
+        <div class="team-chip"><div class="team-name">Hady Zarif Thabet</div><div class="team-id">4241233</div></div>
+      </div>
+    </div>
+    <div class="rc-btns">
+      <a href="research.html" class="rc-btn view">📖 Read Online</a>
+      <a href="DiskVision_Research_Paper.docx" download class="rc-btn dl">⬇ Download</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- COMING SOON -->
+<section class="section fade-up">
+  <div style="background:linear-gradient(135deg,var(--card2),var(--bg2));border:1px solid var(--border);border-radius:18px;padding:2.8rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 70%)"></div>
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem">
+      <span style="font-size:.75rem;color:var(--purple);font-weight:500;letter-spacing:2px;text-transform:uppercase">Under Development</span>
+    </div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:800;margin-bottom:.7rem">What's being built next</h2>
+    <p style="color:var(--text2);font-size:.9rem;line-height:1.7;max-width:550px;margin-bottom:2rem;font-weight:300">These powerful features are currently in active development and will be added to DiskVision in upcoming releases.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem">
+
+      <div style="background:var(--card);border:1px solid rgba(139,92,246,.3);border-radius:13px;padding:1.4rem;position:relative">
+        <div style="position:absolute;top:.75rem;right:.75rem;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:#a78bfa;font-size:.65rem;padding:.2rem .6rem;border-radius:99px;font-weight:500">Coming Soon</div>
+        <div style="font-size:1.6rem;margin-bottom:.75rem">🎮</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem">Gaming Mode</div>
+        <div style="font-size:.82rem;color:var(--text3);line-height:1.6">One click to transform your PC into a lean gaming machine — kills background processes, frees RAM, sets game priority to High, and restores everything when you're done.</div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid rgba(14,165,233,.3);border-radius:13px;padding:1.4rem;position:relative">
+        <div style="position:absolute;top:.75rem;right:.75rem;background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.3);color:var(--acc2);font-size:.65rem;padding:.2rem .6rem;border-radius:99px;font-weight:500">Coming Soon</div>
+        <div style="font-size:1.6rem;margin-bottom:.75rem">💊</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem">Disk Health Score</div>
+        <div style="font-size:.82rem;color:var(--text3);line-height:1.6">A single 0–100 score that grades your entire disk health — disk usage, duplicates, startup bloat, and temp files — with direct fix instructions for each issue.</div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid rgba(16,185,129,.3);border-radius:13px;padding:1.4rem;position:relative">
+        <div style="position:absolute;top:.75rem;right:.75rem;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green);font-size:.65rem;padding:.2rem .6rem;border-radius:99px;font-weight:500">Coming Soon</div>
+        <div style="font-size:1.6rem;margin-bottom:.75rem">🖥</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem">Smart Partition Advisor</div>
+        <div style="font-size:.82rem;color:var(--text3);line-height:1.6">Analyzes how you actually use your drives — games, media, work files — and suggests the optimal partition layout specifically for your usage patterns.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="section fade-up" id="about">
+  <div class="sec-tag">About</div>
+  <h2 class="sec-h" style="text-align:center;margin-bottom:2rem">The person behind it</h2>
+  <div class="founder-box">
+    <div class="founder-av">M</div>
+    <blockquote>I built DiskVision because I was frustrated. Every disk tool does one thing. I wanted something that actually thinks — that uses AI to tell me what's safe and what's not, in my language, on my terms.</blockquote>
+    <div class="founder-name">Mark Mamdouh Sadek</div>
+    <div class="founder-role">Founder & Creator of DiskVision</div>
+    <div class="founder-uni">Faculty of AI · Sphinx University · Class of 2026</div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <div class="fg"></div>
+  <h2>Coming soon to diskvision.online</h2>
+  <p>DiskVision is a university graduation project currently in active development. Stay tuned.</p>
+  <a href="research.html" class="btn-hero primary" style="font-size:1rem;padding:.85rem 2.4rem">📄 Read the Research Paper</a>
+  <br>
+  <div class="domain">diskvision.online</div>
+</section>
+
+<footer>
+  <p>© 2026 DiskVision &nbsp;·&nbsp; Built by <strong>Mark Mamdouh Sadek</strong> &nbsp;·&nbsp;
+  Faculty of AI · Sphinx University &nbsp;·&nbsp;
+  <a href="research.html">Research Paper</a> &nbsp;·&nbsp;
+  <a href="#">diskvision.online</a></p>
+</footer>
+
+<script>
+// Particles
+const pc = document.getElementById('particles');
+for(let i=0;i<25;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.style.left=Math.random()*100+'%';
+  p.style.animationDuration=(8+Math.random()*12)+'s';
+  p.style.animationDelay=(Math.random()*10)+'s';
+  p.style.width=p.style.height=(1+Math.random()*2)+'px';
+  pc.appendChild(p);
+}
+
+// Scroll fade-in
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+// Counter animation for stats
+function animateCounter(el,target,suffix=''){
+  let start=0;const dur=1500;const step=dur/60;
+  const inc=target/60;
+  const timer=setInterval(()=>{
+    start+=inc;
+    if(start>=target){start=target;clearInterval(timer);}
+    el.textContent=Math.floor(start)+(suffix||'')+'';
+  },step);
+}
+const statObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const nums=e.target.querySelectorAll('.sb-num');
+      nums[0]&&animateCounter(nums[0],12,'+');
+      nums[1]&&animateCounter(nums[1],4);
+      nums[2]&&(nums[2].textContent='100%');
+      nums[3]&&(nums[3].textContent='Free');
+      statObs.disconnect();
+    }
+  });
+},{threshold:.5});
+const statsBar=document.querySelector('.statsbar');
+if(statsBar)statObs.observe(statsBar);
+
+// Smooth nav shrink on scroll
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('nav');
+  if(window.scrollY>50){nav.style.padding='.6rem 2rem';}
+  else{nav.style.padding='.9rem 2rem';}
+});
+</script>
+
+<!-- CURSOR GLOW -->
+<div class=cursor-glow id=cursorGlow></div>
+
+<script>
+// Cursor glow effect
+const cg = document.getElementById('cursorGlow');
+let mouseX=0, mouseY=0, glowX=0, glowY=0;
+document.addEventListener('mousemove', e=>{
+  mouseX=e.clientX; mouseY=e.clientY;
+});
+function animGlow(){
+  glowX+=(mouseX-glowX)*.08;
+  glowY+=(mouseY-glowY)*.08;
+  cg.style.left=glowX+'px';
+  cg.style.top=glowY+'px';
+  requestAnimationFrame(animGlow);
+}
+animGlow();
+
+// Hide glow when mouse leaves
+document.addEventListener('mouseleave',()=>cg.style.opacity='0');
+document.addEventListener('mouseenter',()=>cg.style.opacity='1');
+
+// Typing effect on hero subtitle
+const sub = document.querySelector('.hero-sub');
+if(sub){
+  const text = sub.textContent;
+  sub.textContent='';
+  sub.classList.add('typing');
+  let i=0;
+  const typeTimer = setInterval(()=>{
+    sub.textContent+=text[i];
+    i++;
+    if(i>=text.length){
+      clearInterval(typeTimer);
+      sub.classList.remove('typing');
+    }
+  }, 18);
+}
+
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(s=>{
+    if(window.scrollY>=s.offsetTop-200) current=s.id;
+  });
+  navLinks.forEach(a=>{
+    a.classList.remove('active');
+    if(a.getAttribute('href')==='#'+current) a.classList.add('active');
+  });
+});
+
+// Staggered feature cards animation
+const featCards = document.querySelectorAll('.feat');
+const featObs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>{
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0)';
+      }, i*60);
+      featObs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+featCards.forEach(c=>{
+  c.style.opacity='0';
+  c.style.transform='translateY(20px)';
+  c.style.transition='opacity .5s ease, transform .5s ease, border-color .3s, box-shadow .3s';
+  featObs.observe(c);
+});
+</script>
+
+</body>
+</html>
