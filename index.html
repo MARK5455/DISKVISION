@@ -60,7 +60,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.9rem 2rem;display:f
 .glow-right{position:absolute;right:-100px;top:30%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(16,185,129,.05),transparent 70%);pointer-events:none}
 
 /* Hero content */
-.hero-content{position:relative;z-index:2;animation:heroFadeIn .8s ease-out;width:100%;text-align:center}
+.hero-content{position:relative;z-index:2;animation:heroFadeIn .8s ease-out}
 @keyframes heroFadeIn{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
 
 .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.3);color:var(--acc2);padding:.3rem .9rem;border-radius:99px;font-size:.78rem;margin-bottom:1.75rem;font-weight:500;animation:badgePop .6s ease-out .2s both}
@@ -72,7 +72,7 @@ h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weigh
 h1 em{font-style:normal;color:var(--accent);position:relative}
 h1 em::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px}
 
-.hero-sub{font-size:1.1rem;color:var(--text2);max-width:540px;line-height:1.75;margin:0 auto 2.4rem;font-weight:300}
+.hero-sub{font-size:1.1rem;color:var(--text2);max-width:540px;line-height:1.75;margin-bottom:2.4rem;font-weight:300}
 
 .hero-btns{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
 .btn-hero{padding:.75rem 1.8rem;border-radius:10px;font-size:.95rem;font-weight:500;text-decoration:none;transition:all .25s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:.4rem}
@@ -394,7 +394,7 @@ h1 em{animation:gradientShift 3s ease-in-out infinite}
     <p class="hero-sub">DiskVision is an AI-powered Windows desktop app that scans, analyzes, and cleans your storage — and actually tells you what to delete and what to keep.</p>
     <div class="hero-btns">
       <a href="research.html" class="btn-hero primary">📄 Read the Research Paper</a>
-      <a href="research.html" class="btn-hero research">⬇ Download Paper</a>
+      <a href="https://github.com/MARK5455/Diskvision.exe" target="_blank" class="btn-hero research">⭐ View on GitHub</a>
     </div>
   </div>
 
@@ -573,21 +573,12 @@ h1 em{animation:gradientShift 3s ease-in-out infinite}
         <span class="rc-tag">Dr. Amr Hassanain</span>
         <span class="rc-tag">12 References</span>
       </div>
-      <div style="font-size:.75rem;color:var(--text3);margin-bottom:.6rem;font-weight:500">The Team</div>
-      <div class="team-grid">
-        <div class="team-chip"><div class="team-name">Mark Mamdouh Sadek</div><div class="team-id">4241255</div></div>
-        <div class="team-chip"><div class="team-name">Mohamed Shaaban</div><div class="team-id">4241101</div></div>
-        <div class="team-chip"><div class="team-name">Mohamed Saber</div><div class="team-id">4241256</div></div>
-        <div class="team-chip"><div class="team-name">Jenor Saber Atallah</div><div class="team-id">4241257</div></div>
-        <div class="team-chip"><div class="team-name">Moamen Mohamed</div><div class="team-id">4241270</div></div>
-        <div class="team-chip"><div class="team-name">Abdullah Mohamed</div><div class="team-id">4241274</div></div>
-        <div class="team-chip"><div class="team-name">Mohamed Maged</div><div class="team-id">4241622</div></div>
-        <div class="team-chip"><div class="team-name">Hady Zarif Thabet</div><div class="team-id">4241233</div></div>
-      </div>
+      
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.15);border-radius:8px;padding:.5rem 1rem;font-size:.8rem;color:var(--text2)">👥 Team of 8 — Faculty of Computer Science &amp; AI · Sphinx University</div>
     </div>
     <div class="rc-btns">
       <a href="research.html" class="rc-btn view">📖 Read Online</a>
-      <a href="DiskVision_Research_Paper.docx" download class="rc-btn dl">⬇ Download</a>
+      <a href="https://github.com/MARK5455/Diskvision.exe" target="_blank" class="rc-btn dl">⭐ GitHub</a>
     </div>
   </div>
 </section>

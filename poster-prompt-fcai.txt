@@ -1,0 +1,98 @@
+Create a professional academic graduation poster for:
+"DiskVision: AI-Powered Disk Analysis and Storage Optimization"
+
+Poster language: English
+Style: Modern dark tech style inspired by the DiskVision website (deep navy background, cyan accents, subtle neon glow, clean cards, clear hierarchy)
+Orientation: Portrait
+Final print size: 1000 mm (width) x 2000 mm (height)
+Resolution target: print-ready, high quality
+
+==============================
+LAYOUT REQUIREMENTS
+==============================
+Use a strict academic poster structure with clear sections and consistent spacing.
+
+Top Header (full width):
+- Egypt - Sphinx University - Faculty of Computers and Artificial Intelligence - 2024/2025
+- Main title: DiskVision: AI-Powered Disk Analysis and Storage Optimization
+- Subtitle: Graduation Project Poster (FCAI)
+- Meta chips:
+  1) Under Supervision of: Dr. Amr Hassanain
+  2) Course: Work-based Professional Project (Level 2)
+  3) Project Type: Desktop Application for Windows
+
+Main Body (multi-column grid, clean and balanced):
+1) Name of the Students
+   - Mark Mamdouh Sadek
+   - Mohamed Shaaban Mohamed
+   - Mohamed Saber Abdelhamid
+   - Jenor Saber Atallah
+   - Moamen Mohamed Elsayed
+   - Abdullah Mohamed Hamed
+   - Mohamed Maged Abdo
+   - Hady Zarif Thabet
+
+2) Project Title
+   - DiskVision: An Intelligent Disk Cleaner, Analyzer, and AI Advisor for Windows Users.
+
+3) Abstract
+   - DiskVision is a Windows desktop tool that scans storage, detects duplicates, finds temporary files, visualizes disk usage, and provides AI recommendations for safe cleanup. The goal is to help users reclaim space confidently while protecting important files.
+
+4) Objectives
+   - Automate disk analysis and safe cleanup suggestions.
+   - Reduce storage waste from duplicates and temporary data.
+   - Provide clear visual and AI-assisted decision support.
+   - Improve system responsiveness and user experience.
+
+5) Methodology
+   - Recursive file scanning and indexed search.
+   - Duplicate detection using hash-based comparison.
+   - Treemap visualization for folder size distribution.
+   - AI classification (Safe / Caution / Dangerous).
+
+6) Significance of the Project
+   - The project combines multiple storage-management tools in one platform, reducing user confusion and minimizing risky deletion decisions through explainable AI recommendations.
+
+7) Results and Analysis
+   - Accurate identification of large and duplicate files.
+   - Measurable freed space after temp/duplicate cleanup.
+   - Stable performance on large folders with indexed search.
+   - Clear AI feedback with fallback behavior when server is unavailable.
+
+8) Recommendations
+   - Add cloud storage integration (Drive/OneDrive).
+   - Support scheduled automatic cleanup rules.
+   - Improve duplicate detection for near-identical media.
+   - Extend support to macOS and Linux in future versions.
+
+9) References
+   - CCleaner Official Documentation
+   - WinDirStat Documentation
+   - Duplicate Cleaner Technical Notes
+   - TreeSize Product Documentation
+   - Everything Search Documentation
+
+Footer:
+- DiskVision Team - FCAI - Sphinx University
+- Poster Version: 2025 Edition
+
+==============================
+VISUAL DESIGN RULES
+==============================
+1) Keep strong readability for large-format printing (2m x 1m).
+2) Use clear section cards with subtle borders.
+3) Maintain consistent spacing and alignment across all blocks.
+4) Avoid overcrowding; keep enough white/negative space.
+5) Use iconography lightly (optional) for section labels.
+6) Keep contrast high between text and background.
+7) Typography hierarchy:
+   - Main title: very large and bold
+   - Section titles: medium-large bold
+   - Body text: medium, readable from distance
+8) Export print-ready PDF with no clipping, no margin cutoff.
+
+==============================
+OUTPUT
+==============================
+Deliver final poster as:
+- PDF (print-ready), Portrait, 1000mm x 2000mm

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DiskVision Poster - FCAI 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#05080f;--bg2:#090d18;--card:#0d1424;
+      --border:#1e3a5f;--accent:#0ea5e9;--acc2:#38bdf8;
+      --green:#10b981;--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;
+      --page-w:1000mm;--page-h:2000mm;--safe:18mm;--gap:6mm;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"DM Sans",sans-serif;
+      background:radial-gradient(circle at top,#0a1120 0%,var(--bg) 62%);
+      color:var(--text);padding:24px;
+    }
+    .poster{
+      width:min(calc(100vw - 48px), 15.5in);
+      aspect-ratio:30 / 48;
+      margin:0 auto;
+      background:linear-gradient(160deg,var(--bg2),#060a12);
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:0 30px 80px rgba(0,0,0,.5);
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:1.45fr 8.9fr .45fr;
+    }
+    .header{
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(120deg,rgba(14,165,233,.11),rgba(56,189,248,.07));
+      padding:clamp(14px,1.2vw,20px) clamp(18px,1.6vw,28px);
+    }
+    .uni{font-size:clamp(10px,.75vw,14px);color:var(--acc2);font-weight:700;letter-spacing:.4px}
+    .title{
+      margin-top:8px;font-family:"Syne",sans-serif;font-size:clamp(24px,2.35vw,42px);
+      line-height:1.15;letter-spacing:-.5px;
+    }
+    .subtitle{margin-top:8px;color:var(--text2);font-size:clamp(10px,.95vw,16px)}
+    .meta{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+    .chip{
+      padding:4px 9px;border:1px solid var(--border);border-radius:999px;
+      font-size:clamp(9px,.75vw,12px);color:var(--text2);background:rgba(255,255,255,.02)
+    }
+
+    .content{
+      padding:clamp(10px,1vw,16px);
+      display:grid;
+      grid-template-columns:1.25fr 1fr 1fr;
+      grid-template-areas:
+        "students students project"
+        "abstract objectives methodology"
+        "significance results results"
+        "recommend references references";
+      gap:clamp(8px,.7vw,14px);
+      align-content:stretch;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:clamp(10px,.85vw,16px);
+      min-height:0;
+    }
+    .students{grid-area:students}
+    .project{grid-area:project}
+    .abstract{grid-area:abstract}
+    .objectives{grid-area:objectives}
+    .methodology{grid-area:methodology}
+    .significance{grid-area:significance}
+    .results{grid-area:results}
+    .recommend{grid-area:recommend}
+    .references{grid-area:references}
+
+    .card h2{
+      font-family:"Syne",sans-serif;
+      font-size:clamp(12px,1.08vw,19px);
+      margin-bottom:8px;color:var(--acc2);
+      border-bottom:1px solid rgba(56,189,248,.25);
+      padding-bottom:6px;
+    }
+    .significance h2{color:var(--green)}
+    .card p,.card li{
+      color:var(--text2);
+      font-size:clamp(9px,.84vw,14px);
+      line-height:1.55;
+    }
+    .card ul{padding-left:16px}
+
+    .footer{
+      border-top:1px solid var(--border);
+      padding:8px 14px;
+      display:flex;justify-content:space-between;align-items:center;
+      color:var(--text3);font-size:clamp(8px,.7vw,12px)
+    }
+
+    @media print{
+      @page{size:1000mm 2000mm;margin:0}
+      html,body{width:var(--page-w);height:var(--page-h);margin:0;padding:0;background:#fff}
+      .poster{
+        width:var(--page-w);
+        height:var(--page-h);
+        aspect-ratio:auto;
+        border:none;border-radius:0;box-shadow:none;margin:0;
+        grid-template-rows:260mm calc(var(--page-h) - 260mm - 34mm) 34mm;
+      }
+      .header{padding:var(--safe)}
+      .content{
+        padding:0 var(--safe) var(--safe) var(--safe);
+        gap:var(--gap);
+      }
+      .card{border-radius:4mm;padding:5.5mm}
+      .uni{font-size:8mm}
+      .title{font-size:20mm}
+      .subtitle{font-size:6.2mm}
+      .chip{font-size:5.2mm;padding:2.2mm 4.2mm}
+      .card h2{font-size:9mm}
+      .card p,.card li{font-size:6mm;line-height:1.45}
+      .footer{padding:4.2mm var(--safe);font-size:5.2mm}
+    }
+  </style>
+</head>
+<body>
+  <main class="poster">
+    <section class="header">
+      <div class="uni">Egypt - Sphinx University - Faculty of Computers and Artificial Intelligence - 2024/2025</div>
+      <h1 class="title">DiskVision: AI-Powered Disk Analysis and Storage Optimization</h1>
+      <p class="subtitle">Graduation Project Poster (FCAI) - Designed with the same visual identity as the project website</p>
+      <div class="meta">
+        <span class="chip">Under Supervision of: Dr. Amr Hassanain</span>
+        <span class="chip">Course: Work-based Professional Project (Level 2)</span>
+        <span class="chip">Project Type: Desktop Application for Windows</span>
+      </div>
+    </section>
+
+    <section class="content">
+      <article class="card students">
+        <h2>Name of the Students</h2>
+        <p>
+          Mark Mamdouh Sadek - Mohamed Shaaban Mohamed - Mohamed Saber Abdelhamid - Jenor Saber Atallah<br>
+          Moamen Mohamed Elsayed - Abdullah Mohamed Hamed - Mohamed Maged Abdo - Hady Zarif Thabet
+        </p>
+      </article>
+
+      <article class="card project">
+        <h2>Project Title</h2>
+        <p>DiskVision: An Intelligent Disk Cleaner, Analyzer, and AI Advisor for Windows Users.</p>
+      </article>
+
+      <article class="card abstract">
+        <h2>Abstract</h2>
+        <p>
+          DiskVision is a Windows desktop tool that scans storage, detects duplicates, finds temporary files,
+          visualizes disk usage, and provides AI recommendations for safe cleanup. The goal is to help users
+          reclaim space confidently while protecting important files.
+        </p>
+      </article>
+
+      <article class="card objectives">
+        <h2>Objectives</h2>
+        <ul>
+          <li>Automate disk analysis and safe cleanup suggestions.</li>
+          <li>Reduce storage waste from duplicates and temporary data.</li>
+          <li>Provide clear visual and AI-assisted decision support.</li>
+          <li>Improve system responsiveness and user experience.</li>
+        </ul>
+      </article>
+
+      <article class="card methodology">
+        <h2>Methodology</h2>
+        <ul>
+          <li>Recursive file scanning and indexed search.</li>
+          <li>Duplicate detection using hash-based comparison.</li>
+          <li>Treemap visualization for folder size distribution.</li>
+          <li>AI classification (Safe / Caution / Dangerous).</li>
+        </ul>
+      </article>
+
+      <article class="card significance">
+        <h2>Significance of the Project</h2>
+        <p>
+          The project combines multiple storage-management tools in one platform, reducing user confusion and
+          minimizing risky deletion decisions through explainable AI recommendations.
+        </p>
+      </article>
+
+      <article class="card results">
+        <h2>Results and Analysis</h2>
+        <ul>
+          <li>Accurate identification of large and duplicate files.</li>
+          <li>Measurable freed space after temp/duplicate cleanup.</li>
+          <li>Stable performance on large folders with indexed search.</li>
+          <li>Clear AI feedback with fallback behavior when server is unavailable.</li>
+        </ul>
+      </article>
+
+      <article class="card recommend">
+        <h2>Recommendations</h2>
+        <ul>
+          <li>Add cloud storage integration (Drive/OneDrive).</li>
+          <li>Support scheduled automatic cleanup rules.</li>
+          <li>Improve duplicate detection for near-identical media.</li>
+          <li>Extend support to macOS and Linux in future versions.</li>
+        </ul>
+      </article>
+
+      <article class="card references">
+        <h2>References</h2>
+        <ul>
+          <li>CCleaner Official Documentation</li>
+          <li>WinDirStat Documentation</li>
+          <li>Duplicate Cleaner Technical Notes</li>
+          <li>TreeSize Product Documentation</li>
+          <li>Everything Search Documentation</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="footer">
+      <span>DiskVision Team - FCAI - Sphinx University</span>
+      <span>Poster Version: 2025 Edition</span>
+    </section>
+  </main>
+</body>
+</html>
